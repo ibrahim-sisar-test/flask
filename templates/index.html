@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Awareness</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-box {
+      background-color: #eef;
+      padding: 15px;
+      margin-top: 20px;
+      border-left: 5px solid #88f;
+      border-radius: 5px;
+    }
+
+    h1 {
+      color: #222;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>What Websites Know About You</h1>
+    <p>This page shows the information websites can access without asking for your permission.</p>
+
+    <div class="info-box">
+      <h2>Your IP Info</h2>
+      <pre id="ip-info">Loading...</pre>
+    </div>
+
+    <div class="info-box">
+      <h2>Browser & Device Info</h2>
+      <pre id="device-info"></pre>
+    </div>
+
+    <footer>
+      <p>This data was collected without asking for any permissions. Stay aware and protect your privacy.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Get browser and device info
+    function getDeviceInfo() {
+      return {
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        platform: navigator.platform,
+        screen: {
+          width: screen.width,
+          height: screen.height
+        },
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+      };
+    }
+
+    // Display device info
+    const deviceInfo = getDeviceInfo();
+    document.getElementById("device-info").textContent = JSON.stringify(deviceInfo, null, 2);
+
+    // Fetch IP info from backend
+    fetch("/api/ip")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("ip-info").textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(err => {
+        document.getElementById("ip-info").textContent = "Failed to load IP info.";
+      });
+  </script>
+</body>
+</html>
